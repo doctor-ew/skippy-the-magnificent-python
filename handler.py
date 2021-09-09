@@ -16,6 +16,18 @@ import openai
 import os
 import sys
 
+from typing import (
+    Any,
+    Dict,
+    Generator,
+    Iterator,
+    List,
+    NamedTuple,
+    Text,
+    Tuple,
+    TYPE_CHECKING,
+)
+
 # from dotenv import load_dotenv, find_dotenv, dotenv_values
 
 
