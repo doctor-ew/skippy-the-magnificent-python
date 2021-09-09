@@ -8,62 +8,19 @@ __version__ = "0.1.0"
 __license__ = "GPL-3.0"
 __github__ = "https://github.com/doctor-ew/openai-gpt3-nlp-storytelling-flask"
 
-
-import boto3
 import json
 import logging
 import openai
-import os
-import sys
 
-from typing import (
-    Any,
-    Dict,
-    Generator,
-    Iterator,
-    List,
-    NamedTuple,
-    Text,
-    Tuple,
-    TYPE_CHECKING,
-)
+from dotenv import load_dotenv, dotenv_values
 
-# from dotenv import load_dotenv, find_dotenv, dotenv_values
-
-
-class Get_SSM_API_KEY:
-    """Fetches the OpenAI key
-
-    Attributes:
-        ssm: the ssm parameter
-        ssm_name: the OpenAI API Key SSM name
-        ssm_details: the ssm parameter metadata details
-        api_key: the stored OpenAI API Key
-    """
-
-
-def get_secret(ssm_api_key: Get_SSM_API_KEY) -> Text:
-    ssm: Text = boto3.client("ssm")
-    print(f"fetching api key")  # => Delineator
-    ssm_name_fake: Text = os.environ["OPENAI_API_KEY"]
-    ssm_name: Text = os.environ["OPENAI_API_KEY"]
-    ssm_details: Text = ssm.get_parameters(Names=[ssm_name], WithDecryption=True)
-    print(f"|-OO-| Fetched :: param_name:{ssm_name} ")  # => "OPENAI_API_KEY"
-    print(f"|-OO-| Fetched :: param_details:{ssm_details} ")
-    api_key: Text = ssm_details["Parameters"][0]["Value"]
-    print(f"retrieved api key from secrets manager {api_key}")
-    return api_key
-
-
-openai.api_key = get_secret(Get_SSM_API_KEY)
-
-
-# client = boto3.client("ssm")
-
+load_dotenv('env.env')
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+config = dotenv_values("env.env")
+openai.api_key = config['OPENAI_API_KEY']
 
 skippy_prompt = (
     "You are Skippy The Magnificent -- an ancient, AWESOMELY smart and powerful artificial intelligence "
@@ -83,7 +40,7 @@ skippy_prompt = (
 )
 
 
-def skippy(var0, var1):
+def skippy(event, context):
     start_sequence = "\nSTM: "
     restart_sequence = "\nMe: "
 
@@ -99,18 +56,13 @@ def skippy(var0, var1):
     )
 
     # return response
-    # return response.choices[0].text
-    return "Hellloooo!!!! It is I! Skippy, the Magnificent!!"
+    return response.choices[0].text
 
 
 def handler(event, context):
-    config = dotenv_values(".env")
     logger.info(f"Event: {event}")
-    body = {
-        "message": f"Hello from AWS Lambda using Python {sys.version}! Skippy says: 'oy'",
-    }
-
-    #    return result
+    body = dict(
+        message=f"\"Skippy\": \"{skippy(event, context)}\"")
 
     response = {"statusCode": 200, "body": json.dumps(body)}
     logger.info(f"response: {response}")

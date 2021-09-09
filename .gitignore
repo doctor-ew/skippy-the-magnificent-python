@@ -159,3 +159,4 @@ cython_debug/
 *.bak*
 /node_modules/
 /.serverless/
+/env.env
