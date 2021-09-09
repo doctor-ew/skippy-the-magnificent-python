@@ -28,6 +28,10 @@ provider:
 functions:
   handler:
     handler: handler.handler
+    events:
+      - http:
+          path: hello
+          method: get
   hello:
     handler: handler.hello
   skippy:

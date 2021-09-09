@@ -61,8 +61,9 @@ def skippy(event, context):
 
 def handler(event, context):
     logger.info(f"Event: {event}")
+
     body = dict(
-        message=f"\"Skippy\": \"{skippy(event, context)}\"")
+        message=f"Skippy: {skippy(event, context)}")
 
     response = {"statusCode": 200, "body": json.dumps(body)}
     logger.info(f"response: {response}")
