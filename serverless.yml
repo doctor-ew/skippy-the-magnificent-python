@@ -50,8 +50,8 @@ custom:
       - OPENAI_API_KEY
     file: true
   customDomain:
-    domainName: https://www.doctorew.com
-    createRoute53Record: false
+    domainName: skippy.doctorew.com
+    createRoute53Record: true
 
 package:
   exclude:
