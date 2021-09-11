@@ -46,7 +46,7 @@ def skippy(event, context):
 
     response = openai.Completion.create(
         engine="davinci",
-        prompt=f"{skippy_prompt} \nMe: hi there\nSTM:",
+        prompt=f"{skippy_prompt} \nMe: {event}\nSTM:",
         temperature=0.93,
         max_tokens=64,
         top_p=1,
@@ -56,14 +56,38 @@ def skippy(event, context):
     )
 
     # return response
-    return response.choices[0].text
+    # return f"Filthy_Monkey: {event}, Skippy: {response.choices[0].text}"
+    return dict(
+        filthy_monkey={event},
+        skippy={response.choices[0].text})
+
+
+def hello(event, context):
+    logger.info(f"\n |-o-| Event: {event} :: type: {type(event)}")
+
+    msg = "hello there"
+
+    body = dict(
+        message=f"{skippy(msg, context)}")
+
+    response = {"statusCode": 200, "body": json.dumps(body)}
+    logger.info(f"response: {response}")
+    return response
 
 
 def handler(event, context):
-    logger.info(f"Event: {event}")
+    # check if no data is sent to the event
+
+    data = json.loads(event['body'])
+
+    if 'msg' not in data:
+        logging.error("Validation Failed")
+        raise Exception("Couldn't create the todo item.")
+
+    logger.info(f"\n |-o-| Event: {data} :: msg: {data} ::: type: {type(data)}")
 
     body = dict(
-        message=f"Skippy: {skippy(event, context)}")
+        message=f"{skippy(data['msg'], context)}")
 
     response = {"statusCode": 200, "body": json.dumps(body)}
     logger.info(f"response: {response}")

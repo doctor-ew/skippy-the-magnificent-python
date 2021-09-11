@@ -25,15 +25,28 @@ provider:
   name: aws
   runtime: python3.8
   lambdaHashingVersion: 20201221
+  tracing: true # enable tracing
+  iamRoleStatements:
+    - Effect: "Allow" # xray permissions (required)
+      Action:
+        - "xray:PutTraceSegments"
+        - "xray:PutTelemetryRecords"
+      Resource:
+        - "*"
+
 functions:
   handler:
     handler: handler.handler
     events:
       - http:
-          path: hello
-          method: get
+          path: chat
+          method: post
   hello:
     handler: handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
   skippy:
     handler: handler.skippy
 #    environment:
@@ -65,3 +78,4 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-offline
   - serverless-python-requirements
+  - serverless-plugin-tracing
