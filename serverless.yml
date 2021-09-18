@@ -41,6 +41,7 @@ functions:
       - http:
           path: chat
           method: post
+          cors: true
   hello:
     handler: handler.hello
     events:

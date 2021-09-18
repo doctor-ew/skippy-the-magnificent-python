@@ -14,13 +14,13 @@ import openai
 
 from dotenv import load_dotenv, dotenv_values
 
-load_dotenv('env.env')
+load_dotenv("env.env")
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 config = dotenv_values("env.env")
-openai.api_key = config['OPENAI_API_KEY']
+openai.api_key = config["OPENAI_API_KEY"]
 
 skippy_prompt = (
     "You are Skippy The Magnificent -- an ancient, AWESOMELY smart and powerful artificial intelligence "
@@ -57,9 +57,7 @@ def skippy(event, context):
 
     # return response
     # return f"Filthy_Monkey: {event}, Skippy: {response.choices[0].text}"
-    return dict(
-        filthy_monkey={event},
-        skippy={response.choices[0].text})
+    return dict(filthy_monkey=event, skippy_the_magnificent=response.choices[0].text)
 
 
 def hello(event, context):
@@ -67,10 +65,20 @@ def hello(event, context):
 
     msg = "hello there"
 
-    body = dict(
-        message=f"{skippy(msg, context)}")
+    body = dict(message=f"{skippy(msg, context)}")
 
-    response = {"statusCode": 200, "body": json.dumps(body)}
+    response = {
+        "statusCode": 200,
+        "headers": {
+            "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+            "Access-Control-Allow-Credentials": True,
+            #            "Access-Control-Allow-Origin": "https://doctorew.com",
+            #            "Access-Control-Allow-Origin": "https://www.doctorew.com",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+        },
+        "body": json.dumps(body),
+    }
     logger.info(f"response: {response}")
     return response
 
@@ -78,17 +86,27 @@ def hello(event, context):
 def handler(event, context):
     # check if no data is sent to the event
 
-    data = json.loads(event['body'])
+    data = json.loads(event["body"])
 
-    if 'msg' not in data:
+    if "msg" not in data:
         logging.error("Validation Failed")
         raise Exception("Couldn't create the todo item.")
 
     logger.info(f"\n |-o-| Event: {data} :: msg: {data} ::: type: {type(data)}")
 
-    body = dict(
-        message=f"{skippy(data['msg'], context)}")
+    body = dict(message=f"{skippy(data['msg'], context)}")
 
-    response = {"statusCode": 200, "body": json.dumps(body)}
+    response = {
+        "statusCode": 200,
+        "headers": {
+            "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+            "Access-Control-Allow-Credentials": True,
+            #            "Access-Control-Allow-Origin": "https://doctorew.com",
+            #            "Access-Control-Allow-Origin": "https://www.doctorew.com",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+        },
+        "body": json.dumps(body),
+    }
     logger.info(f"response: {response}")
     return response
