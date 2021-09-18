@@ -94,11 +94,13 @@ def handler(event, context):
 
     logger.info(f"\n |-o-| Event: {data} :: msg: {data} ::: type: {type(data)}")
 
-    body = dict(message=f"{skippy(data['msg'], context)}")
+    # body = dict(message=f"{skippy(data['msg'], context)}")
+    body = skippy(data["msg"], context)
 
     response = {
         "statusCode": 200,
         "headers": {
+            "Content-Type": "application/json",
             "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
             "Access-Control-Allow-Credentials": True,
             #            "Access-Control-Allow-Origin": "https://doctorew.com",
