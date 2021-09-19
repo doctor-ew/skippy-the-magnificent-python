@@ -56,8 +56,8 @@ def skippy(event, context):
     )
 
     # return response
-    # return f"Filthy_Monkey: {event}, Skippy: {response.choices[0].text}"
-    return dict(filthy_monkey=event, skippy_the_magnificent=response.choices[0].text)
+    # return f"lowly_human: {event}, Skippy: {response.choices[0].text}"
+    return dict(lowly_human=event, skippy_the_magnificent=response.choices[0].text)
 
 
 def hello(event, context):
@@ -72,9 +72,9 @@ def hello(event, context):
         "headers": {
             "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
             "Access-Control-Allow-Credentials": True,
-            #            "Access-Control-Allow-Origin": "https://doctorew.com",
-            #            "Access-Control-Allow-Origin": "https://www.doctorew.com",
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": "https://doctorew.com",
+            "Access-Control-Allow-Origin": "https://*.doctorew.com",
+            # "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
         },
         "body": json.dumps(body),
